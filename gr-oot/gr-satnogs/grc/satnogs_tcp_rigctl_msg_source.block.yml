@@ -1,0 +1,40 @@
+id: satnogs_tcp_rigctl_msg_source
+label: Rigctl Message Source (TCP)
+
+parameters:
+- id: addr
+  label: IP Address
+  dtype: string
+  default: '127.0.0.1'
+
+- id: port
+  label: Port
+  dtype: int
+  default: 16886
+
+- id: mode
+  label: Mode
+  dtype: enum
+  options: ['False', 'True']
+  option_labels: ['Client', 'Server']
+  default: 'False'
+
+- id: interval
+  label: Update Interval (milliseconds)
+  dtype: int
+  default: 1000
+
+- id: mtu
+  label: MTU
+  dtype: int
+  default: 1500
+
+outputs:
+- id: freq
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.tcp_rigctl_msg_source(${addr}, ${port}, ${mode}, ${interval}, ${mtu})
+
+file_format: 1

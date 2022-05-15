@@ -1,0 +1,37 @@
+
+namespace satnogs;
+
+table Global {
+    station_id:uint32;
+    observation_id:uint64;
+    network_url:string;
+    tle:string;
+    transmitter:string;
+    encoding:string;
+    client_version:string;
+    observation_timeframe:string;
+    decoder_phase:uint64;
+    decoder_resampling_ratio:float64;
+}
+
+table Capture {
+}
+
+table Annotation {
+    pdu:string;
+    decoder_crc_valid:bool;
+    frequency_offset:float64;
+    decoder_corrected_bits:uint64;
+    time:string;
+    decoder_symbol_erasures:uint64;
+    snr:float64;
+    decoder_name:string;
+    decoder_version:string;
+    symbol_timing_error:float64;
+}
+
+table Descr {
+    global:Global;
+    annotation:Annotation;
+    capture:Capture;
+}

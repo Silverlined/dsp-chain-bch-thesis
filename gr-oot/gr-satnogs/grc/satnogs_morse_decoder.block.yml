@@ -1,0 +1,27 @@
+id: satnogs_morse_decoder
+label: Morse Decoder
+
+parameters:
+- id: unrecognized_char
+  label: Unrecognized character
+  dtype: int
+  default: ord('#')
+
+- id: min_frame_len
+  label: Minimum Message Length
+  dtype: int
+  default: 5
+
+inputs:
+- id: in
+  domain: message
+
+outputs:
+- id: out
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.morse_decoder(${unrecognized_char}, ${min_frame_len})
+
+file_format: 1

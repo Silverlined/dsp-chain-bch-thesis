@@ -1,0 +1,12 @@
+id: variable_rs_encoder
+label: RS (255,223) Encoder Definition
+flags: [show_id]
+
+
+value: ${satnogs.rs_encoder_make()}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.rs_encoder_make()
+
+file_format: 1

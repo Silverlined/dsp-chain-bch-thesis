@@ -1,0 +1,38 @@
+id: satnogs_noaa_apt_sink
+label: NOAA APT Sink
+
+parameters:
+- id: filename_png
+  label: Output PNG Filename
+  dtype: file_save
+
+- id: width
+  label: Image Width
+  dtype: int
+  default: 2080
+
+- id: height
+  label: Image Height
+  dtype: int
+  default: 1800
+
+- id: sync
+  label: Synchronize
+  dtype: bool
+  default: True
+
+- id: flip
+  label: Flip Image
+  dtype: bool
+  default: False
+
+inputs:
+- label: in
+  domain: stream
+  dtype: float
+
+templates:
+  imports: import satnogs
+  make: satnogs.noaa_apt_sink(${filename_png}, ${width}, ${height}, ${sync}, ${flip})
+
+file_format: 1

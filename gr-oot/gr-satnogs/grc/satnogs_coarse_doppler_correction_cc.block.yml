@@ -1,0 +1,38 @@
+id: satnogs_coarse_doppler_correction_cc
+label: Doppler Correction (Coarse)
+
+parameters:
+- id: target_freq
+  label: Target frequency
+  dtype: real
+  default: 0.0
+
+- id: offset
+  label: Offset
+  dtype: real
+  default: 0.0
+
+- id: sampling_rate
+  label: Sample Rate
+  dtype: real
+  default: samp_rate
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+- id: freq
+  domain: message
+  optional: true
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+
+templates:
+  imports: import satnogs
+  make: satnogs.coarse_doppler_correction_cc(${target_freq}, ${offset}, ${sampling_rate})
+
+file_format: 1

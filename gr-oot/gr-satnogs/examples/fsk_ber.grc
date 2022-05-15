@@ -1,0 +1,745 @@
+options:
+  parameters:
+    author: surligas
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: fsk_ber
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: run
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: FSK BER Simulation
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: bits_per_symbol
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 128.0]
+    rotation: 0
+    state: enabled
+- name: gaussian_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: filter.firdes.gaussian(1.0, sps, 1.0, 4*sps)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 71]
+    rotation: 0
+    state: enabled
+- name: interp_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: numpy.convolve(numpy.array(gaussian_taps), numpy.array(sq_wave))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 203]
+    rotation: 0
+    state: enabled
+- name: modulation_index
+  id: variable
+  parameters:
+    comment: ''
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 7]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 32.0]
+    rotation: 0
+    state: enabled
+- name: sq_wave
+  id: variable
+  parameters:
+    comment: ''
+    value: (1.0, ) * sps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 135]
+    rotation: 0
+    state: enabled
+- name: variable_ieee802_15_4_encoder_0
+  id: variable_ieee802_15_4_encoder
+  parameters:
+    comment: ''
+    crc: satnogs.crc.CRC32_C
+    preamble: '0x55'
+    preamble_len: '12'
+    sync_word: '[79, 121, 97]'
+    var_len: 'True'
+    whitening: satnogs.whitening.make_ccsds(True)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [705, 16]
+    rotation: 0
+    state: true
+- name: variable_ieee802_15_4_variant_decoder_0
+  id: variable_ieee802_15_4_variant_decoder
+  parameters:
+    comment: ''
+    crc: satnogs.crc.CRC32_C
+    drop_invalid: 'True'
+    frame_len: '255'
+    preamble: '[0x55]*12'
+    preamble_thrsh: '14'
+    sync_thrsh: '5'
+    sync_word: '[79, 121, 97]'
+    var_len: 'True'
+    whitening: satnogs.whitening.make_ccsds(True)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [886, 16]
+    rotation: 0
+    state: true
+- name: variable_ieee802_15_4_variant_decoder_2
+  id: variable_ieee802_15_4_variant_decoder
+  parameters:
+    comment: ''
+    crc: satnogs.crc.CRC32_C
+    drop_invalid: 'True'
+    frame_len: '255'
+    preamble: '[0x55]*8'
+    preamble_thrsh: '12'
+    sync_thrsh: '3'
+    sync_word: '[49, 229]'
+    var_len: 'True'
+    whitening: satnogs.whitening_sptr(None)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [566, 678]
+    rotation: 0
+    state: true
+- name: analog_frequency_modulator_fc_0
+  id: analog_frequency_modulator_fc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sensitivity: (math.pi*modulation_index) / sps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 344.0]
+    rotation: 180
+    state: enabled
+- name: analog_quadrature_demod_cf_0_0
+  id: analog_quadrature_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    gain: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [566, 615]
+    rotation: 0
+    state: enabled
+- name: blocks_message_strobe_random_0
+  id: blocks_message_strobe_random
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    dist: blocks.STROBE_POISSON
+    maxoutbuf: '0'
+    mean: '1'
+    minoutbuf: '0'
+    msg: pmt.intern("TEST")
+    std: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 184.0]
+    rotation: 0
+    state: true
+- name: blocks_packed_to_unpacked_xx_0
+  id: blocks_packed_to_unpacked_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_chunk: '1'
+    comment: ''
+    endianness: gr.GR_MSB_FIRST
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1152, 224.0]
+    rotation: 0
+    state: true
+- name: blocks_pdu_to_tagged_stream_0
+  id: blocks_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [850, 228]
+    rotation: 0
+    state: true
+- name: blocks_tagged_stream_align_0
+  id: blocks_tagged_stream_align
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 360.0]
+    rotation: 180
+    state: enabled
+- name: blocks_tagged_stream_multiply_length_0
+  id: blocks_tagged_stream_multiply_length
+  parameters:
+    affinity: ''
+    alias: ''
+    c: sps * 8
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 352.0]
+    rotation: 180
+    state: enabled
+- name: cfo
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: ''
+    short_id: ''
+    type: eng_float
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1080, 16.0]
+    rotation: 0
+    state: true
+- name: channels_channel_model_0
+  id: channels_channel_model
+  parameters:
+    affinity: ''
+    alias: ''
+    block_tags: 'True'
+    comment: ''
+    epsilon: '1.0'
+    freq_offset: cfo/(samp_rate*sps)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_voltage: math.sqrt(  (sps*(2*bits_per_symbol)) * math.pow(10, -snr/10))
+    seed: int(random.random() * 100)
+    taps: 1 + 1j
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [112, 328.0]
+    rotation: 180
+    state: enabled
+- name: dc_blocker_xx_0
+  id: dc_blocker_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '1024'
+    long_form: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: ff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [772, 607]
+    rotation: 0
+    state: enabled
+- name: digital_binary_slicer_fb_0
+  id: digital_binary_slicer_fb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1345, 750]
+    rotation: 180
+    state: enabled
+- name: digital_burst_shaper_xx_0_0
+  id: digital_burst_shaper_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    insert_phasing: 'False'
+    length_tag_name: '"packet_len"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    post_padding: '1500'
+    pre_padding: '0'
+    type: complex
+    window: ([])
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [381, 327]
+    rotation: 180
+    state: enabled
+- name: digital_chunks_to_symbols_xx_0
+  id: digital_chunks_to_symbols_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    dimension: '1'
+    in_type: byte
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    out_type: float
+    symbol_table: '[-1, 1]'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1454, 351]
+    rotation: 180
+    state: true
+- name: digital_symbol_sync_xx_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_bpsk().base()
+    damping: '1.0'
+    loop_bw: 2*math.pi/200
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilters: '128'
+    osps: '1'
+    pfb_mf_taps: '[]'
+    resamp_type: digital.IR_MMSE_8TAP
+    sps: '8'
+    ted_gain: '1.0'
+    ted_type: digital.TED_GARDNER
+    type: ff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1120, 560.0]
+    rotation: 0
+    state: true
+- name: import_0_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 27]
+    rotation: 0
+    state: true
+- name: import_0_0_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 83]
+    rotation: 0
+    state: true
+- name: import_0_0_0_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import random
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 136.0]
+    rotation: 0
+    state: true
+- name: interp_fir_filter_xxx_0
+  id: interp_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: "Do not forget to set the \nfilter delay! Otherwise the\nburst shaper\
+      \ wll split the\nframe in an appropriate place!"
+    interp: sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: len(interp_taps)//sps
+    taps: interp_taps
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 336.0]
+    rotation: 180
+    state: enabled
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: 20e3
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate * (sps //8)
+    type: fir_filter_ccf
+    width: '1000'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 567]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_1
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: samp_rate / 2
+    decim: '1'
+    gain: '1'
+    interp: '4'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate * (sps //8)
+    type: fir_filter_fff
+    width: '1000'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 568.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate*sps
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [251, 453]
+    rotation: 0
+    state: disabled
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: sps//8
+    fbw: '0'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [135, 590]
+    rotation: 0
+    state: true
+- name: satnogs_ber_calculator_0
+  id: satnogs_ber_calculator
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    frame_size: '64'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nframes: '10000'
+    skip: '50'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 208.0]
+    rotation: 0
+    state: true
+- name: satnogs_frame_decoder_0
+  id: satnogs_frame_decoder
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decoder_object: variable_ieee802_15_4_variant_decoder_0
+    itype: byte
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1046, 751]
+    rotation: 180
+    state: enabled
+- name: satnogs_frame_encoder_0
+  id: satnogs_frame_encoder
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    encoder_object: variable_ieee802_15_4_encoder_0
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 224.0]
+    rotation: 0
+    state: true
+- name: snr
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: ''
+    short_id: ''
+    type: eng_float
+    value: '12'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1152, 16.0]
+    rotation: 0
+    state: true
+- name: sps
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: samples per symbol
+    short_id: ''
+    type: intx
+    value: '32'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [394, 17]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_frequency_modulator_fc_0, '0', blocks_tagged_stream_multiply_length_0, '0']
+- [analog_quadrature_demod_cf_0_0, '0', dc_blocker_xx_0, '0']
+- [blocks_message_strobe_random_0, strobe, satnogs_ber_calculator_0, trigger]
+- [blocks_packed_to_unpacked_xx_0, '0', digital_chunks_to_symbols_xx_0, '0']
+- [blocks_pdu_to_tagged_stream_0, '0', blocks_packed_to_unpacked_xx_0, '0']
+- [blocks_tagged_stream_align_0, '0', digital_burst_shaper_xx_0_0, '0']
+- [blocks_tagged_stream_multiply_length_0, '0', blocks_tagged_stream_align_0, '0']
+- [channels_channel_model_0, '0', qtgui_freq_sink_x_0, '0']
+- [channels_channel_model_0, '0', rational_resampler_xxx_0, '0']
+- [dc_blocker_xx_0, '0', low_pass_filter_1, '0']
+- [digital_binary_slicer_fb_0, '0', satnogs_frame_decoder_0, '0']
+- [digital_burst_shaper_xx_0_0, '0', channels_channel_model_0, '0']
+- [digital_chunks_to_symbols_xx_0, '0', interp_fir_filter_xxx_0, '0']
+- [digital_symbol_sync_xx_0, '0', digital_binary_slicer_fb_0, '0']
+- [interp_fir_filter_xxx_0, '0', analog_frequency_modulator_fc_0, '0']
+- [low_pass_filter_0, '0', analog_quadrature_demod_cf_0_0, '0']
+- [low_pass_filter_1, '0', digital_symbol_sync_xx_0, '0']
+- [rational_resampler_xxx_0, '0', low_pass_filter_0, '0']
+- [satnogs_ber_calculator_0, pdu, satnogs_frame_encoder_0, pdu]
+- [satnogs_frame_decoder_0, out, satnogs_ber_calculator_0, received]
+- [satnogs_frame_encoder_0, pdu, blocks_pdu_to_tagged_stream_0, pdus]
+
+metadata:
+  file_format: 1

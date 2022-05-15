@@ -1,0 +1,16 @@
+name: Lucky-7
+norad: 44406
+data:
+  &tlm Telemetry:
+    unknown
+  &image Image:
+    image: lucky7
+transmitters:
+  4k8 FSK downlink:
+    frequency: 437.525e+6
+    modulation: FSK
+    baudrate: 4800
+    framing: Lucky-7
+    data:
+    - *tlm
+    - *image

@@ -1,0 +1,48 @@
+id: satellites_astrocast_fx25_deframer
+label: Astrocast FX.25 Deframer
+category: '[Satellites]/Deframers'
+
+parameters:
+-   id: threshold
+    label: Syncword threshold
+    dtype: int
+    default: 0
+-   id: nrzi
+    label: Coding
+    dtype: enum
+    default: 'True'
+    options: ['True', 'False']
+    option_labels: ['NRZ-I', 'NRZ']
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: float
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites.components.deframers
+    make: satellites.components.deframers.astrocast_fx25_deframer(nrzi = ${nrzi}, syncword_threshold = ${threshold}, options=${options})
+
+documentation: |-
+    Deframes Astrocast somewhat-noncompliant FX.25 packets
+
+    Input:
+        A stream of soft symbols containing Astrocast FX.25 packets
+
+    Output:
+        PDUs with the deframed Astrocast FX.25 packets
+
+    Parameters:
+        Syncword threshold: number of bit errors to allow in syncword detection
+        Coding: selects NRZ-I or NRZ coding
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

@@ -1,0 +1,36 @@
+id: variable_ax100_mode5_encoder
+label: AX.100 Mode 5 Encoder Definition
+flags: [show_id]
+
+parameters:
+- id: preamble
+  label: Preamble
+  dtype: raw
+  default: [0x55, 0x55, 0x55, 0x55, 0x55]
+
+- id: sync_word
+  label: Synchronization Word
+  dtype: raw
+  default: [0x31, 0xe5]
+  
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: rs
+  label: Reed Solomon
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+value: ${satnogs.ax100_encoder_mode5_make(preamble, sync_word, crc, rs)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax100_encoder_mode5_make(${preamble}, ${sync_word}, ${crc}, ${rs})
+
+file_format: 1

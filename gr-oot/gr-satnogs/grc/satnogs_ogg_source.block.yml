@@ -1,0 +1,29 @@
+id: satnogs_ogg_source
+label: OGG Source
+
+parameters:
+- id: filename
+  label: File
+  dtype: file_save
+
+- id: channels
+  label: Channels
+  dtype: int
+  default: 1
+
+- id: repeat
+  label: Repeat
+  dtype: bool
+  default: False
+
+outputs:
+- label: out
+  domain: stream
+  dtype: float
+  multiplicity: ${channels}
+
+templates:
+  imports: import satnogs
+  make: satnogs.ogg_source(${filename}, ${channels}, ${repeat})
+
+file_format: 1

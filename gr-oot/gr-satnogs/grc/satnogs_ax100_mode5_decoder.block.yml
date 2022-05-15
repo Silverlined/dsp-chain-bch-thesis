@@ -1,0 +1,51 @@
+id: variable_ax100_mode5_decoder
+label: AX.100 Mode 5 Decoder Definition
+flags: [show_id]
+
+parameters:
+- id: preamble
+  label: Preamble
+  dtype: raw
+  default: [0x55, 0x55, 0x55, 0x55, 0x55]
+
+- id: preamble_thrsh
+  label: Preamble Threshold
+  dtype: int
+  default: 5
+
+- id: sync_word
+  label: Synchronization Word
+  dtype: raw
+  default: [0x31, 0xe5]
+
+- id: sync_thrsh
+  label: Synchronization Word Threshold
+  dtype: int
+  default: 3
+
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: whitening
+  label: Whitening
+  dtype: raw
+  default: 'satnogs.whitening_sptr(None)'
+
+- id: rs
+  label: Reed Solomon
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+value: ${satnogs.ax100_decoder_mode5_make(preamble, preamble_thrsh, sync_word, sync_thrsh, crc, whitening, rs)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax100_decoder_mode5_make(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${crc}, ${whitening}, ${rs})
+
+file_format: 1

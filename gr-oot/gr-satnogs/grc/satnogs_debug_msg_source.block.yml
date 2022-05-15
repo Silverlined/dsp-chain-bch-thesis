@@ -1,0 +1,30 @@
+id: satnogs_debug_msg_source
+label: Message Source (String)
+
+parameters:
+- id: msg
+  label: Message
+  dtype: string
+  default: 'HELLO WORLD'
+
+- id: delay
+  label: Delay (seconds)
+  dtype: real
+  default: 0.01
+
+- id: repeat
+  label: Repeat
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+outputs:
+- id: msg
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.debug_msg_source(${msg}, ${delay}, ${repeat})
+
+file_format: 1

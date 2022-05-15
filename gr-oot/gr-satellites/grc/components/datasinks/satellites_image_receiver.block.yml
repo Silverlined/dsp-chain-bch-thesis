@@ -1,0 +1,56 @@
+id: satellites_image_receiver
+label: Image Receiver
+category: '[Satellites]/Data sinks'
+
+parameters:
+-   id: receiver
+    label: ImageReceiver class
+    dtype: string
+-   id: path
+    label: Path
+    dtype: string
+-   id: verbose
+    label: Verbose
+    dtype: bool
+    default: False
+    hide: part
+-   id: display
+    label: Display
+    dtype: bool
+    default: True
+    hide: part
+-   id: fullscreen
+    label: Fullscreen
+    dtype: bool
+    default: True
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: message
+    id: in
+
+templates:
+    imports: import satellites.components.datasinks
+    make: satellites.components.datasinks.file_receiver(${receiver}, ${path}, ${verbose}, display=${display}, fullscreen=${fullscreen}, options=${options})
+
+documentation: |-
+    Reassembles images transmitted in chunks and displays them in real time
+
+    The images are also saved to files in a directory
+
+    Input:
+        PDUs with packets containing image chunks
+
+    Parameters:
+        ImageReceiver class: chunk format definition, which is a class in satellites.filereceiver
+        Path: path of the directory to save files to
+        Verbose: print additional information to the standard output
+        Display: show the image in real time using feh
+        Fullscreen: run feh in fullscreen
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

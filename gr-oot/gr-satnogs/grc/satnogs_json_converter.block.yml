@@ -1,0 +1,21 @@
+id: satnogs_json_converter
+label: Telemetry to JSON
+
+parameters:
+- id: extra
+  label: Extra JSON field
+  dtype: raw
+
+inputs:
+- id: in
+  domain: message
+
+outputs:
+- id: out
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.json_converter(${extra})
+
+file_format: 1

@@ -1,0 +1,12 @@
+*~
+*.pyc
+*.pyo
+build/*
+apps/*.py
+.settings/
+.project
+.cproject
+.pyproject
+.pydevproject
+nbproject/
+.vscode

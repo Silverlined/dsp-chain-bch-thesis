@@ -1,0 +1,122 @@
+options:
+  parameters:
+    author: Daniel Estevez
+    category: '[Satellites]/FEC'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: Viterbi27 decoder with convention (POLYB, ~POLYA) (output is unpacked)
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: ccsds_viterbi
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: CCSDS/NASA-GSFC Viterbi decoder
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: dec_cc
+  id: variable_cc_decoder_def
+  parameters:
+    comment: ''
+    dim1: '4'
+    dim2: '4'
+    framebits: '80'
+    k: '7'
+    mode: fec.CC_STREAMING
+    ndim: '0'
+    padding: 'False'
+    polys: '[79, -109]'
+    rate: '2'
+    state_end: '-1'
+    state_start: '0'
+    value: '"ok"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 252]
+    rotation: 0
+    state: enabled
+- name: fec_extended_decoder_0_0
+  id: fec_extended_decoder
+  parameters:
+    affinity: ''
+    alias: ''
+    ann: None
+    comment: ''
+    decoder_list: dec_cc
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    puncpat: '''11'''
+    threadtype: none
+    value: fec_extended_decoder
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 124]
+    rotation: 0
+    state: enabled
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 148]
+    rotation: 0
+    state: enabled
+- name: pad_source_0
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 148]
+    rotation: 0
+    state: enabled
+
+connections:
+- [fec_extended_decoder_0_0, '0', pad_sink_0, '0']
+- [pad_source_0, '0', fec_extended_decoder_0_0, '0']
+
+metadata:
+  file_format: 1

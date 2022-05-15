@@ -1,0 +1,47 @@
+id: satnogs_waterfall_sink
+label: Waterfall Sink
+
+parameters:
+- id: samp_rate
+  label: Sampling Rate
+  dtype: real
+  default: samp_rate
+
+- id: fft_size
+  label: FFT Size
+  dtype: int
+  default: 1024
+
+- id: rps
+  label: Rows per Second
+  dtype: int
+  default: 10
+
+- id: mode
+  label: Mode
+  dtype: enum
+  options: ['0', '1', '2']
+  option_labels: ['Decimation', 'Max Hold', 'Mean']
+  default: '1'
+
+- id: center_freq
+  label: Center Frequency
+  dtype: real
+  default: 0.0
+
+- id: filename
+  label: File
+  dtype: file_save
+
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+templates:
+  imports: import satnogs
+  make: satnogs.waterfall_sink(${samp_rate}, ${center_freq}, ${rps}, ${fft_size},
+    ${filename}, ${mode})
+
+file_format: 1

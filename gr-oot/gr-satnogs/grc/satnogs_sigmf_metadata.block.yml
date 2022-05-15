@@ -1,0 +1,16 @@
+id: variable_sigmf_metadata
+label: SigMF Metadata Format
+flags: [show_id]
+
+parameters:
+- id: global_segment_json
+  label: Global Segment JSON
+  dtype: raw
+
+value: ${satnogs.sigmf_metadata_make(global_segment_json)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.sigmf_metadata_make(${global_segment_json})
+
+file_format: 1

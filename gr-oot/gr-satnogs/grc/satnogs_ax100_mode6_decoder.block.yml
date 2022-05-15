@@ -1,0 +1,33 @@
+id: variable_ax100_mode6_decoder
+label: AX.100 Mode 6 Decoder Definition
+flags: [show_id]
+
+parameters:
+
+
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: whitening
+  label: Whitening
+  dtype: raw
+  default: 'satnogs.whitening_make_ccsds()'
+
+- id: descramble
+  label: G3RUH Scrambling
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+value: ${satnogs.ax100_decoder_mode6_make(crc, whitening, descramble)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax100_decoder_mode6_make(${crc}, ${whitening}, ${descramble})
+
+file_format: 1

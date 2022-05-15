@@ -1,0 +1,25 @@
+name: 1KUNS-PF
+alternative_names:
+norad: 43466
+data:
+  &tlm Telemetry:
+    telemetry: sat_1kuns_pf
+  &image JPEG Images:
+    image: sat_1kuns_pf
+transmitters:
+  1k2 FSK downlink:
+    frequency: 437.300e+6
+    modulation: FSK
+    baudrate: 1200
+    framing: AX100 ASM+Golay
+    data:
+    - *tlm
+    - *image
+  9k6 FSK downlink:
+    frequency: 437.300e+6
+    modulation: FSK
+    baudrate: 9600
+    framing: AX100 ASM+Golay
+    data:
+    - *tlm
+    - *image

@@ -1,0 +1,1474 @@
+options:
+  parameters:
+    author: EnduroSat AD
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: EnduroSat AD
+    description: SDR_UHF_Transceiver
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: UHF_RX_TX_Base
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: UHF_RX_TX_Base
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: bandwidth
+  id: variable
+  parameters:
+    comment: ''
+    value: baudrate+2*deviation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 4.0]
+    rotation: 0
+    state: enabled
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 4.0]
+    rotation: 0
+    state: enabled
+- name: lo_offset
+  id: variable
+  parameters:
+    comment: ''
+    value: int(100e3)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 4.0]
+    rotation: 0
+    state: enabled
+- name: max_freq_offset
+  id: variable
+  parameters:
+    comment: ''
+    value: ppm * rx_freq / 1e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 4.0]
+    rotation: 0
+    state: enabled
+- name: ppm
+  id: variable
+  parameters:
+    comment: ''
+    value: 2.5+4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [456, 4.0]
+    rotation: 0
+    state: enabled
+- name: pulse_shaping_filter_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: np.ones( sqfilter_len ) / sqfilter_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 1444.0]
+    rotation: 0
+    state: true
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: int(1.92e6)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 4.0]
+    rotation: 0
+    state: enabled
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: int( baudrate * decimation / (decimation // 2) / baudrate )
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 4.0]
+    rotation: 0
+    state: enabled
+- name: sqfilter_len
+  id: variable
+  parameters:
+    comment: ''
+    value: int( baudrate * decimation / (decimation // 2) / baudrate )
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 4.0]
+    rotation: 0
+    state: enabled
+- name: agc_reference
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: AGC Reference
+    short_id: ''
+    type: eng_float
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 68.0]
+    rotation: 0
+    state: true
+- name: analog_quadrature_demod_cf_0
+  id: analog_quadrature_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Gain = sample rate / 2 * pi * frequency deviation
+    gain: ( baudrate * decimation / (decimation // 2) ) / ( 2 * np.pi * deviation
+      )
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 1340.0]
+    rotation: 0
+    state: true
+- name: analog_quadrature_demod_cf_0_0_0_0
+  id: analog_quadrature_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Get frequency offset
+    gain: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 1112.0]
+    rotation: 0
+    state: enabled
+- name: baudrate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Data rate
+    short_id: ''
+    type: intx
+    value: int(9.6e3)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 68.0]
+    rotation: 0
+    state: true
+- name: blocks_add_const_vxx_0
+  id: blocks_add_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Avoid division by zero
+    const: 1e-20
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1056, 1436.0]
+    rotation: 0
+    state: enabled
+- name: blocks_delay_0
+  id: blocks_delay
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    delay: 1024//2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 1012.0]
+    rotation: 0
+    state: enabled
+- name: blocks_divide_xx_0
+  id: blocks_divide_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1248, 1344.0]
+    rotation: 0
+    state: enabled
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 176.0]
+    rotation: 0
+    state: disabled
+- name: blocks_message_debug_0_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 2064.0]
+    rotation: 0
+    state: disabled
+- name: blocks_message_debug_0_0_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 2240.0]
+    rotation: 0
+    state: disabled
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '1024'
+    max_iter: '4096'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: 1.0/1024.0
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 1088.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: agc_reference
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 1436.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Shift to remove frequency offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 1016.0]
+    rotation: 0
+    state: enabled
+- name: blocks_pdu_to_tagged_stream_0
+  id: blocks_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 300.0]
+    rotation: 0
+    state: enabled
+- name: blocks_repack_bits_bb_1
+  id: blocks_repack_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    align_output: 'True'
+    comment: 'Generate Byte Stream
+
+      Pack bits into stream of bytes'
+    endianness: gr.GR_MSB_FIRST
+    k: '1'
+    l: '8'
+    len_tag_key: '""'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 516.0]
+    rotation: 0
+    state: enabled
+- name: blocks_rms_xx_0
+  id: blocks_rms_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rms_alpha
+    comment: "\u03C4=\u22121/log(1\u2212\u03B1)\n\u03B1=0.01 -> \u224899.5 samples\n\
+      for sps=2 -> \u224850 symbols \u22486 bytes"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 1436.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vco_c_0
+  id: blocks_vco_c
+  parameters:
+    affinity: ''
+    alias: ''
+    amplitude: '1.0'
+    comment: Generate signal impulse at the offset frequency
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    sensitivity: -baudrate*decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 1096.0]
+    rotation: 0
+    state: enabled
+- name: clk_bw
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Clock Recovery BW (relative to baudrate)
+    short_id: ''
+    type: eng_float
+    value: '0.06'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 68.0]
+    rotation: 0
+    state: true
+- name: clk_limit
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Clock Recovery Limit (relative to baudrate)
+    short_id: ''
+    type: eng_float
+    value: '0.004'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 68.0]
+    rotation: 0
+    state: true
+- name: deviation
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Frequency Deviation
+    short_id: ''
+    type: intx
+    value: '2400'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [544, 68.0]
+    rotation: 0
+    state: true
+- name: digital_binary_slicer_fb_0
+  id: digital_binary_slicer_fb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 1680.0]
+    rotation: 0
+    state: enabled
+- name: digital_descrambler_bb_0_0
+  id: digital_descrambler_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    len: '16'
+    mask: '0x21'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    seed: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 2284.0]
+    rotation: 0
+    state: disabled
+- name: digital_gmsk_mod_0
+  id: digital_gmsk_mod
+  parameters:
+    affinity: ''
+    alias: ''
+    bt: '1.0'
+    comment: ''
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_symbol: '10'
+    verbose: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 516.0]
+    rotation: 0
+    state: enabled
+- name: digital_symbol_sync_xx_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_bpsk().base()
+    damping: '1.0'
+    loop_bw: 'clk_bw '
+    max_dev: clk_limit * sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilters: '128'
+    osps: '1'
+    pfb_mf_taps: '[]'
+    resamp_type: digital.IR_PFB_NO_MF
+    sps: sps
+    ted_gain: '1.47'
+    ted_type: digital.TED_GARDNER
+    type: ff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [320, 1664.0]
+    rotation: 0
+    state: true
+- name: fir_filter_xxx_0
+  id: fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'The input pulses must have peaks (not flat),
+
+      which usually can be implemented by using a matched filter
+
+      before clock recovery.'
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: pulse_shaping_filter_taps
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 1332.0]
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy as np
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [904, 4.0]
+    rotation: 0
+    state: true
+- name: iocp_endurosat_IOCP_CLIENT_PDU_0
+  id: iocp_endurosat_IOCP_CLIENT_PDU
+  parameters:
+    address: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    port: '6666'
+    type: '100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1728, 128.0]
+    rotation: 0
+    state: true
+- name: iocp_endurosat_TAG_TRIGGER_0
+  id: iocp_endurosat_TAG_TRIGGER
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    filter: nPktSeqNum
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1680, 628.0]
+    rotation: 0
+    state: enabled
+- name: limesdr_sink_0
+  id: limesdr_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    allow_tcxo_dac: '0'
+    analog_bandw_ch0: 5e6
+    analog_bandw_ch1: 5e6
+    calibr_bandw_ch0: 2.5e6
+    calibr_bandw_ch1: 2.5e6
+    channel_mode: '0'
+    comment: ''
+    dacVal: '180'
+    digital_bandw_ch0: '0'
+    digital_bandw_ch1: samp_rate
+    filename: ''
+    gain_dB_ch0: '60'
+    gain_dB_ch1: '1'
+    length_tag_name: '"packet_len"'
+    nco_freq_ch0: '0'
+    nco_freq_ch1: '0'
+    oversample: '0'
+    pa_path_ch0: '2'
+    pa_path_ch1: '255'
+    rf_freq: tx_freq
+    samp_rate: samp_rate
+    serial: 0009070602460F25
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1680, 524.0]
+    rotation: 0
+    state: enabled
+- name: limesdr_source_0
+  id: limesdr_source
+  parameters:
+    affinity: ''
+    alias: ''
+    allow_tcxo_dac: '0'
+    analog_bandw_ch0: 1.5e6
+    analog_bandw_ch1: 1.5e6
+    calibr_bandw_ch0: 2.5e6
+    calibr_bandw_ch1: 2.5e6
+    ch_align: 'False'
+    channel_mode: '0'
+    comment: ''
+    dacVal: '180'
+    digital_bandw_ch0: samp_rate
+    digital_bandw_ch1: samp_rate
+    filename: ''
+    gain_dB_ch0: '30'
+    gain_dB_ch1: '1'
+    lna_path_ch0: '2'
+    lna_path_ch1: '2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nco_freq_ch0: '0'
+    nco_freq_ch1: '0'
+    oversample: '0'
+    rf_freq: rx_freq-lo_offset
+    samp_rate: samp_rate
+    serial: 0009070602460F25
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 792.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: 'Every halving of Rx filter bandwidth increases sensitivity with 3 dB
+
+      On the other hand, sensitivity decreases with about 1.5-2.5 dB per halving of
+      the modulation index
+
+      to a certain limit where the loss increases very fast
+
+      (Wouldn''t go below a modulation index less than 0.5).'
+    cutoff_freq: baudrate
+    decim: decimation // 2
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    type: fir_filter_ccf
+    width: baudrate / 8.0
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 972.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: "Perform a relaxed filter to increase \nthe performance of the auto frequency\n\
+      correction"
+    cutoff_freq: bandwidth
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    type: fir_filter_ccf
+    width: baudrate / 4.0
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 1060.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_1
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: baudrate*decimation/2
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    type: fir_filter_ccf
+    width: baudrate*decimation/4
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 476.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_2
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: baudrate+2*deviation
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    type: fir_filter_ccf
+    width: baudrate*decimation/64
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 476.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  GMSK
+      Modulation, Interpolation with Reconstruction Filter
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 660.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  One-bit
+      Differential Detection & Automatic Gain Control
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 1548.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0_0
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Doppler
+      compensation with Digital Down Conversion
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 900.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0_1
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Auto
+      Frequency Correction, Decimation with Anti-Aliasing Filter
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 1196.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0_2
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Radio
+      Packet Parsing
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 2124.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0_2_0
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Clock
+      Recovery & Hard Decision Decoding
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 1852.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_0_2_1
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  AX.25
+      Parsing
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 2356.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_1
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Parameters
+      & Variables
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 152.0]
+    rotation: 0
+    state: enabled
+- name: note_0_1_2
+  id: note
+  parameters:
+    alias: ''
+    comment: '.                                                                                                                                                                                                                                  Radio
+      Packet Encapsulation
+
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+    note: SECTION
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 372.0]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: baudrate*decimation
+    fbw: ''
+    interp: samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 500.0]
+    rotation: 0
+    state: enabled
+- name: rms_alpha
+  id: parameter
+  parameters:
+    alias: ''
+    comment: "\u03C4=\u22121/log(1\u2212\u03B1)\n\u03B1=0.01 -> \u224899.5 samples\n\
+      for sps=2 -> \u224850 symbols \u22486 bytes"
+    hide: none
+    label: RMS Gain
+    short_id: ''
+    type: eng_float
+    value: '0.02'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 68.0]
+    rotation: 0
+    state: true
+- name: rx_freq
+  id: parameter
+  parameters:
+    alias: ''
+    comment: 4176620F
+    hide: none
+    label: RX Frequency
+    short_id: ''
+    type: intx
+    value: int(435e6)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 68.0]
+    rotation: 0
+    state: true
+- name: satellites_hdlc_deframer_0_0
+  id: satellites_hdlc_deframer
+  parameters:
+    affinity: ''
+    alias: ''
+    check_fcs: 'True'
+    comment: ''
+    max_length: '256'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 2292.0]
+    rotation: 0
+    state: disabled
+- name: satellites_nrzi_decode_0
+  id: satellites_nrzi_decode
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 2304.0]
+    rotation: 0
+    state: disabled
+- name: satnogs_doppler_compensation_0
+  id: satnogs_doppler_compensation
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    compensate: '1'
+    fine_correction: '0'
+    lo_offset: lo_offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    out_samp_rate: baudrate * decimation
+    samp_rate: samp_rate
+    sat_freq: rx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 788.0]
+    rotation: 0
+    state: enabled
+- name: satnogs_doppler_compensation_0_0
+  id: satnogs_doppler_compensation
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    compensate: '1'
+    fine_correction: '0'
+    lo_offset: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    out_samp_rate: samp_rate
+    samp_rate: samp_rate
+    sat_freq: tx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1424, 500.0]
+    rotation: 0
+    state: enabled
+- name: si446x_var_len_packet_handler_1_0
+  id: si446x_var_len_packet_handler
+  parameters:
+    affinity: ''
+    alias: ''
+    check_crc: 'True'
+    comment: ''
+    crc_poly: '4129'
+    has_crc: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sync: '0xAA7E'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 1980.0]
+    rotation: 0
+    state: enabled
+- name: tx_freq
+  id: parameter
+  parameters:
+    alias: ''
+    comment: 4162270E
+    hide: none
+    label: TX Frequency
+    short_id: ''
+    type: intx
+    value: int(434e6)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 68.0]
+    rotation: 0
+    state: true
+- name: var_len_packet_creator_0
+  id: var_len_packet_creator
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: "The modulator needs some time to stabilize as the \nmodulated carrier\
+      \ wave goes from zero up to full power.\nTherefore, extra preamble and postamble\
+      \ bytes were added to each transmitted packet.\n\nThe output is an unpacked\
+      \ binary stream."
+    crc_poly: '4129'
+    has_crc: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    preamble_bytes: '20'
+    sync: '0xAA7E'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [560, 276.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tagged_stream
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 300.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: filtered
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1520, 1028.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: doppler
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1104, 836.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0_0_1
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: binary_stream
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 1676.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0_0_2
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: equalized
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1424, 1356.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_1
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tunnel_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1976, 100.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_1_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: confirm_tx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 540.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_2
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1976, 156.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_3
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1976, 212.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_4
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tunnel_in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 2004.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tagged_stream
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 524.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: doppler
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 1012.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_0_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: equalized
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 1728.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_0_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: binary_stream
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 2004.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_0_1_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: binary_stream
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 2300.0]
+    rotation: 0
+    state: disabled
+- name: virtual_source_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: "Rx receiver's filter BW = Signal BW + 2 * ppm * Carrier Frequency\n\n\
+      The occupied bandwidth for 98% of the transmitted power\nis determined from\
+      \ Carson\u2019s Rule:\n\nSignal BW = 2*f_deviation + data_rate\n\nDue to Gaussian\
+      \ pulse shaping,higher frequency components are supressed,\ni.e. the actual\
+      \ occupied bandwidth is slightly smaller."
+    stream_id: filtered
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [48, 1340.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_2
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tunnel_in
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1528, 132.0]
+    rotation: 0
+    state: true
+- name: virtual_source_2_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: confirm_tx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1528, 204.0]
+    rotation: 0
+    state: true
+- name: virtual_source_4
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tunnel_out
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 300.0]
+    rotation: 0
+    state: true
+- name: virtual_source_5
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: rx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 900.0]
+    rotation: 0
+    state: disabled
+- name: virtual_source_6
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: tx_freq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 636.0]
+    rotation: 0
+    state: disabled
+
+connections:
+- [analog_quadrature_demod_cf_0, '0', fir_filter_xxx_0, '0']
+- [analog_quadrature_demod_cf_0_0_0_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_add_const_vxx_0, '0', blocks_divide_xx_0, '1']
+- [blocks_delay_0, '0', blocks_multiply_xx_0, '0']
+- [blocks_divide_xx_0, '0', virtual_sink_0_0_2, '0']
+- [blocks_moving_average_xx_0, '0', blocks_vco_c_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_add_const_vxx_0, '0']
+- [blocks_multiply_xx_0, '0', low_pass_filter_0, '0']
+- [blocks_pdu_to_tagged_stream_0, '0', virtual_sink_0, '0']
+- [blocks_repack_bits_bb_1, '0', digital_gmsk_mod_0, '0']
+- [blocks_rms_xx_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_vco_c_0, '0', blocks_multiply_xx_0, '1']
+- [digital_binary_slicer_fb_0, '0', virtual_sink_0_0_1, '0']
+- [digital_descrambler_bb_0_0, '0', satellites_hdlc_deframer_0_0, '0']
+- [digital_gmsk_mod_0, '0', low_pass_filter_2, '0']
+- [digital_symbol_sync_xx_0, '0', digital_binary_slicer_fb_0, '0']
+- [fir_filter_xxx_0, '0', blocks_divide_xx_0, '0']
+- [fir_filter_xxx_0, '0', blocks_rms_xx_0, '0']
+- [iocp_endurosat_IOCP_CLIENT_PDU_0, out, virtual_sink_1, '0']
+- [iocp_endurosat_IOCP_CLIENT_PDU_0, rx_freq, virtual_sink_2, '0']
+- [iocp_endurosat_IOCP_CLIENT_PDU_0, tx_freq, virtual_sink_3, '0']
+- [iocp_endurosat_TAG_TRIGGER_0, event, virtual_sink_1_0, '0']
+- [limesdr_source_0, '0', satnogs_doppler_compensation_0, '0']
+- [low_pass_filter_0, '0', virtual_sink_0_0, '0']
+- [low_pass_filter_0_0, '0', analog_quadrature_demod_cf_0_0_0_0, '0']
+- [low_pass_filter_1, '0', satnogs_doppler_compensation_0_0, '0']
+- [low_pass_filter_2, '0', rational_resampler_xxx_0, '0']
+- [rational_resampler_xxx_0, '0', low_pass_filter_1, '0']
+- [satellites_hdlc_deframer_0_0, out, blocks_message_debug_0_0_0, print_pdu]
+- [satellites_nrzi_decode_0, '0', digital_descrambler_bb_0_0, '0']
+- [satnogs_doppler_compensation_0, '0', virtual_sink_0_0_0, '0']
+- [satnogs_doppler_compensation_0_0, '0', iocp_endurosat_TAG_TRIGGER_0, '0']
+- [satnogs_doppler_compensation_0_0, '0', limesdr_sink_0, '0']
+- [si446x_var_len_packet_handler_1_0, out, blocks_message_debug_0_0, print_pdu]
+- [si446x_var_len_packet_handler_1_0, out, virtual_sink_4, '0']
+- [var_len_packet_creator_0, out, blocks_pdu_to_tagged_stream_0, pdus]
+- [virtual_source_0, '0', blocks_repack_bits_bb_1, '0']
+- [virtual_source_0_0, '0', blocks_delay_0, '0']
+- [virtual_source_0_0, '0', low_pass_filter_0_0, '0']
+- [virtual_source_0_0_0, '0', digital_symbol_sync_xx_0, '0']
+- [virtual_source_0_1, '0', si446x_var_len_packet_handler_1_0, '0']
+- [virtual_source_0_1_0, '0', satellites_nrzi_decode_0, '0']
+- [virtual_source_1, '0', analog_quadrature_demod_cf_0, '0']
+- [virtual_source_2, '0', iocp_endurosat_IOCP_CLIENT_PDU_0, in]
+- [virtual_source_2_0, '0', iocp_endurosat_IOCP_CLIENT_PDU_0, event]
+- [virtual_source_4, '0', blocks_message_debug_0, print_pdu]
+- [virtual_source_4, '0', var_len_packet_creator_0, in]
+- [virtual_source_5, '0', satnogs_doppler_compensation_0, doppler]
+- [virtual_source_6, '0', satnogs_doppler_compensation_0_0, doppler]
+
+metadata:
+  file_format: 1

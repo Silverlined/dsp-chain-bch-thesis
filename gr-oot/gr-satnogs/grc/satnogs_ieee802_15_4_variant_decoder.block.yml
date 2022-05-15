@@ -1,0 +1,71 @@
+id: variable_ieee802_15_4_variant_decoder
+label: IEEE 802.15.4 Decoder Definition
+flags: [show_id]
+
+parameters:
+- id: var_len
+  label: Variable Length
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: preamble
+  label: Preamble
+  dtype: raw
+  default: [0x55, 0x55, 0x55, 0x55, 0x55]
+
+- id: preamble_thrsh
+  label: Preamble Threshold
+  dtype: int
+  default: 5
+
+- id: sync_word
+  label: Synchronization Word
+  dtype: raw
+  default: [0x31, 0xe5]
+
+- id: sync_thrsh
+  label: Synchronization Word Threshold
+  dtype: int
+  default: 3
+  
+- id: frame_len
+  label: (Maximum) Frame Length
+  dtype: int
+  default: 240
+
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: whitening
+  label: Whitening
+  dtype: raw
+  default: 'satnogs.whitening_sptr(None)'
+
+- id: drop_invalid
+  label: Drop CRC failed frames
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['True', 'False']
+ 
+- id: rs
+  label: Use RS(255,223)
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+  option_labels: ['True', 'False']
+
+
+value: ${satnogs.ieee802_15_4_variant_decoder_make(preamble, preamble_thrsh, sync_word, sync_thrsh, crc, whitening, var_len, frame_len, drop_invalid, rs)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ieee802_15_4_variant_decoder_make(${preamble}, ${preamble_thrsh}, ${sync_word}, ${sync_thrsh}, ${crc}, ${whitening}, ${var_len}, ${frame_len}, ${drop_invalid}, ${rs})
+
+file_format: 1

@@ -1,0 +1,48 @@
+id: variable_ax100_mode6_encoder
+label: AX.100 Mode 6 Encoder Definition
+flags: [show_id]
+
+parameters:
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: whitening
+  label: Whitening
+  dtype: raw
+  default: 'satnogs.whitening_make_ccsds()'
+
+- id: scrambling
+  label: G3RUH Descrambling
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: nrzi
+  label: NRZI Encoding
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: preamble_len
+  label: Preamble Length
+  dtype: int
+  default: 16
+
+- id: postamble_len
+  label: Postamble Length
+  dtype: int
+  default: 16
+
+value: ${satnogs.ax100_encoder_mode6_make(preamble_len, postamble_len, whitening, scrambling, nrzi, crc)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax100_encoder_mode6_make(${preamble_len}, ${postamble_len}, ${whitening}, ${scrambling}, ${nrzi}, ${crc})
+
+file_format: 1

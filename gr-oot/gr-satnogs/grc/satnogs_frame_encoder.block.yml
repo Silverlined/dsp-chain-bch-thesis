@@ -1,0 +1,23 @@
+id: satnogs_frame_encoder
+label: Frame Encoder
+
+parameters:
+
+- id: encoder_object
+  label: Encoder object
+  dtype: raw
+  default: None
+
+inputs:
+- id: pdu
+  domain: message
+
+outputs:
+- id: pdu
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.frame_encoder(${encoder_object})
+
+file_format: 1

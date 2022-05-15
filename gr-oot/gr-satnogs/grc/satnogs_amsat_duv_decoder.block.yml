@@ -1,0 +1,22 @@
+id: variable_amsat_duv_decoder
+label: AMSAT DUV Decoder Definition
+flags: [show_id]
+
+parameters:
+- id: control_symbol
+  label: Control symbol
+  dtype: string
+  default: '0011111010'
+
+- id: frame_len
+  label: Maximum Frame Length
+  dtype: int
+  default: 96
+
+value: ${satnogs.amsat_duv_decoder_make(control_symbol, frame_len)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.amsat_duv_decoder_make(${control_symbol}, ${frame_len})
+
+file_format: 1

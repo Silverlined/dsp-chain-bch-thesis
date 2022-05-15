@@ -1,0 +1,54 @@
+id: satnogs_doppler_compensation
+label: Doppler Compensation
+
+templates:
+  imports: import satnogs
+  make: satnogs.doppler_compensation(${samp_rate}, ${sat_freq}, ${lo_offset}, ${out_samp_rate}, ${compensate}, ${fine_correction})
+
+
+parameters:
+- id: samp_rate
+  label: Input Sampling Rate
+  dtype: real
+
+- id: sat_freq
+  label: Satellite Frequency
+  dtype: real
+
+- id: lo_offset
+  label: LO Offset
+  dtype: real
+
+- id: out_samp_rate
+  label: Target Sampling Rate
+  dtype: real
+
+- id: compensate
+  label: Compensate Doppler
+  dtype: int
+  options: [0, 1]
+  option_labels: ['Off', 'On']
+  default: 1
+  
+- id: fine_correction
+  label: Correction
+  dtype: int
+  options: [0, 1]
+  option_labels: ['Coarse', 'Fine']
+  default: 0
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+- label: doppler
+  domain: message
+  optional: 1
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+
+file_format: 1

@@ -1,0 +1,41 @@
+id: satellites_codec2_udp_sink
+label: Codec2 UDP sink
+category: '[Satellites]/Data sinks'
+
+parameters:
+-   id: ip
+    label: IP
+    dtype: string
+    default: '127.0.0.1'
+-   id: port
+    label: Port
+    dtype: int
+    default: 7000
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: message
+    id: in
+
+templates:
+    imports: import satellites.components.datasinks
+    make: satellites.components.datasinks.codec2_udp_sink(ip=${ip}, port=${port}, options=${options}) 
+
+documentation: |-
+    Sends Codec2 digital voice frames by UDP
+
+    Each 7 byte frame is sent in a different UDP packet to ensure minimum latency
+
+    Input:
+        A stream of PDUs containing Codec2 frames
+
+    Parameters:
+        IP: destination IP to send the UDP packets to
+        Port: destination port to send the UDP packets to
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

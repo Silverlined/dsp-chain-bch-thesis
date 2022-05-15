@@ -1,0 +1,43 @@
+id: satellites_aausat4_deframer
+label: AAUSAT-4 Deframer
+category: '[Satellites]/Deframers'
+
+parameters:
+-   id: threshold
+    label: Syncword threshold
+    dtype: int
+    default: 0
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: float
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites.components.deframers
+    make: satellites.components.deframers.aausat4_deframer(syncword_threshold = ${threshold}, options=${options})
+
+documentation: |-
+    Deframes custom packets from AAUSAT-4
+
+    The AAUSAT-4 framing is similar to the CCSDS concatenated protocol
+
+    Input:
+        A stream of soft symbols containing AAUSAT-4 packets
+
+    Output:
+        PDUs with the deframed AAUSAT-4 packets
+
+    Parameters:
+        Syncword threshold: number of bit errors to allow in syncword detection
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

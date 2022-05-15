@@ -1,0 +1,43 @@
+id: satellites_encode_rs
+label: Reed-Solomon Encoder
+category: '[Satellites]/FEC'
+
+parameters:
+-   id: nsym
+    label: Bits per symbol
+    default: 8
+    dtype: int
+-   id: gfpoly
+    label: Generator polynomial
+    default: 0x11d
+    dtype: int
+-   id: fcr
+    label: First consecutive root
+    default: 1
+    dtype: int
+-   id: prim
+    label: Primitive element
+    default: 1
+    dtype: int
+-   id: nroots
+    label: Number of roots
+    default: 1
+    dtype: int
+-   id: interleave
+    label: Interleave depth
+    default: 1
+    dtype: int
+
+inputs:
+-   domain: message
+    id: in
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites
+    make: satellites.encode_rs(${nsym}, ${gfpoly}, ${fcr}, ${prim}, ${nroots}, ${interleave})
+
+file_format: 1

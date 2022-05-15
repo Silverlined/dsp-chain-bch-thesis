@@ -1,0 +1,66 @@
+id: satellites_bpsk_demodulator
+label: BPSK Demodulator
+category: '[Satellites]/Demodulators'
+
+parameters:
+-   id: baudrate
+    label: Baudrate
+    dtype: float
+-   id: samp_rate
+    label: Sample rate
+    dtype: float
+    default: samp_rate
+-   id: f_offset
+    label: Frequency offset (Hz)
+    dtype: float
+    default: 0
+-   id: differential
+    label: Differential
+    dtype: bool
+    default: False
+-   id: manchester
+    label: Manchester
+    dtype: bool
+    default: False
+-   id: iq
+    label: IQ input
+    dtype: bool
+    default: False
+    hide: part
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: ${ 'complex' if iq else 'float' }
+
+outputs:
+-   domain: stream
+    dtype: float
+
+templates:
+    imports: import satellites.components.demodulators
+    make: satellites.components.demodulators.bpsk_demodulator(baudrate = ${baudrate}, samp_rate = ${samp_rate}, f_offset = ${f_offset}, differential = ${differential}, manchester = ${manchester}, iq = ${iq}, options=${options})
+
+documentation: |-
+    Demodulates a BPSK signal
+
+    Input:
+        A stream of RF samples containing a real or IQ (complex) BPSK signal
+
+    Output:
+        The demodulated BPSK soft symbols, normalized to amplitude one
+
+    Parameters:
+        Baudrate: The BPSK baudrate in symbols per second
+        Sample rate: The input sample rate in samples per second
+        Frequency offset: The centre frequency of the BPSK signal in the input in Hz
+        Differential: Enables non-coherent differential demodulation of DBPSK
+        Manchester: Enables Manchester decoding
+        IQ input: enables IQ (complex) input
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

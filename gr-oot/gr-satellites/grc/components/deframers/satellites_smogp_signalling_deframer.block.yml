@@ -1,0 +1,48 @@
+id: satellites_smogp_signalling_deframer
+label: SMOG-P Signalling Deframer
+category: '[Satellites]/Deframers'
+
+parameters:
+-   id: threshold
+    label: Syncword threshold
+    dtype: int
+    default: 0
+-   id: protocol
+    label: Protocol
+    dtype: enum
+    default: 'False'
+    options: ['False', 'True']
+    option_labels: ['SMOG-P', 'SMOG-1']
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: float
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites.components.deframers
+    make: satellites.components.deframers.smogp_signalling_deframer(syncword_threshold = ${threshold}, new_protocol=${protocol}, options=${options})
+
+documentation: |-
+    Deframes SMOG-P or SMOG-1 signalling frames
+
+    Input:
+        A stream of soft symbols containing signalling frames
+
+    Output:
+        PDUs with the deframed signalling frames
+
+    Parameters:
+        Syncword threshold: number of bit errors to allow in syncword detection
+        Protocol: chooses between SMOG-P older protocol and SMOG-1 newer protocol
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

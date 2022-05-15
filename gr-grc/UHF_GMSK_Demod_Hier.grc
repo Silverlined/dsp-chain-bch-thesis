@@ -1,0 +1,664 @@
+options:
+  parameters:
+    author: EnduroSat
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: EnduroSat
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: UHF_GMSK_Demod_Hier
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: UHF_GMSK_Demod_Hier
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: bandwidth
+  id: variable
+  parameters:
+    comment: ''
+    value: baudrate+2*deviation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 4.0]
+    rotation: 0
+    state: enabled
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [448, 4.0]
+    rotation: 0
+    state: enabled
+- name: pulse_shaping_filter_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: np.ones( sqfilter_len ) / sqfilter_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 668.0]
+    rotation: 0
+    state: true
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: int( baudrate * decimation / (lp_decimation) / baudrate )
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 4.0]
+    rotation: 0
+    state: enabled
+- name: sqfilter_len
+  id: variable
+  parameters:
+    comment: ''
+    value: int( baudrate * decimation / (decimation // 2) / baudrate )
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 4.0]
+    rotation: 0
+    state: enabled
+- name: agc_reference
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: AGC Reference
+    short_id: ''
+    type: eng_float
+    value: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [456, 68.0]
+    rotation: 0
+    state: true
+- name: analog_quadrature_demod_cf_0
+  id: analog_quadrature_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Gain = sample rate / 2 * pi * frequency deviation
+    gain: ( baudrate * decimation / lp_decimation ) / ( 2 * np.pi * deviation )
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [248, 556.0]
+    rotation: 0
+    state: true
+- name: analog_quadrature_demod_cf_0_0_0_0
+  id: analog_quadrature_demod_cf
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Get frequency offset
+    gain: '1.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 316.0]
+    rotation: 0
+    state: enabled
+- name: baudrate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Data rate
+    short_id: ''
+    type: intx
+    value: int(9.6e3)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 68.0]
+    rotation: 0
+    state: true
+- name: blocks_add_const_vxx_0
+  id: blocks_add_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Avoid division by zero
+    const: 1e-20
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 652.0]
+    rotation: 0
+    state: enabled
+- name: blocks_delay_0
+  id: blocks_delay
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    delay: 1024//2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 216.0]
+    rotation: 0
+    state: enabled
+- name: blocks_divide_xx_0
+  id: blocks_divide_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1248, 560.0]
+    rotation: 0
+    state: enabled
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '1024'
+    max_iter: '4096'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: 1.0/1024.0
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: agc_reference
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 652.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Shift to remove frequency offset
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 224.0]
+    rotation: 0
+    state: enabled
+- name: blocks_rms_xx_0
+  id: blocks_rms_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: rms_alpha
+    comment: "\u03C4=\u22121/log(1\u2212\u03B1)\n\u03B1=0.01 -> \u224899.5 samples\n\
+      for sps=2 -> \u224850 symbols \u22486 bytes"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 652.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vco_c_0
+  id: blocks_vco_c
+  parameters:
+    affinity: ''
+    alias: ''
+    amplitude: '1.0'
+    comment: Generate signal impulse at the offset frequency
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    sensitivity: -baudrate*decimation
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 300.0]
+    rotation: 0
+    state: enabled
+- name: clk_bw
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Clock Recovery BW (relative to baudrate)
+    short_id: ''
+    type: eng_float
+    value: '0.06'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 68.0]
+    rotation: 0
+    state: true
+- name: clk_limit
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Clock Recovery Limit (relative to baudrate)
+    short_id: ''
+    type: eng_float
+    value: '0.004'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 68.0]
+    rotation: 0
+    state: true
+- name: cutoff_freq
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: LP Filter Cutoff [Hz]
+    short_id: ''
+    type: intx
+    value: '9600'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 68.0]
+    rotation: 0
+    state: true
+- name: deviation
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Frequency Deviation
+    short_id: ''
+    type: intx
+    value: '2400'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 68.0]
+    rotation: 0
+    state: enabled
+- name: digital_symbol_sync_xx_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_bpsk().base()
+    damping: '1.0'
+    loop_bw: 'clk_bw '
+    max_dev: clk_limit * sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilters: '128'
+    osps: '1'
+    pfb_mf_taps: '[]'
+    resamp_type: digital.IR_PFB_NO_MF
+    sps: sps
+    ted_gain: ted_gain
+    ted_type: digital.TED_GARDNER
+    type: ff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 832.0]
+    rotation: 0
+    state: true
+- name: fir_filter_xxx_0
+  id: fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'The input pulses must have peaks (not flat),
+
+      which usually can be implemented by using a matched filter
+
+      before clock recovery.'
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_delay: '0'
+    taps: pulse_shaping_filter_taps
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 548.0]
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy as np
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [544, 20.0]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: 'Every halving of Rx filter bandwidth increases sensitivity with 3 dB
+
+      On the other hand, sensitivity decreases with about 1.5-2.5 dB per halving of
+      the modulation index
+
+      to a certain limit where the loss increases very fast
+
+      (Wouldn''t go below a modulation index less than 0.5).'
+    cutoff_freq: cutoff_freq
+    decim: lp_decimation
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    type: fir_filter_ccf
+    width: baudrate / 8.0
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 188.0]
+    rotation: 0
+    state: enabled
+- name: low_pass_filter_0_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: "Perform a relaxed filter to increase \nthe performance of the auto frequency\n\
+      correction"
+    cutoff_freq: bandwidth
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: baudrate*decimation
+    type: fir_filter_ccf
+    width: baudrate / 4.0
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 268.0]
+    rotation: 0
+    state: enabled
+- name: lp_decimation
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: LP Decimation [2-48, 5-19.2]
+    short_id: ''
+    type: intx
+    value: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 68.0]
+    rotation: 0
+    state: true
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 848.0]
+    rotation: 0
+    state: true
+- name: pad_source_0
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [0, 220.0]
+    rotation: 0
+    state: true
+- name: rms_alpha
+  id: parameter
+  parameters:
+    alias: ''
+    comment: "\u03C4=\u22121/log(1\u2212\u03B1)\n\u03B1=0.01 -> \u224899.5 samples\n\
+      for sps=2 -> \u224850 symbols \u22486 bytes"
+    hide: none
+    label: RMS Gain
+    short_id: ''
+    type: eng_float
+    value: '0.02'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 68.0]
+    rotation: 0
+    state: true
+- name: ted_gain
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: TED Gain
+    short_id: ''
+    type: eng_float
+    value: '1.47'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 132.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: filtered
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 236.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0_0_2
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: equalized
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1456, 568.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_0_0_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: equalized
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 896.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: "Rx receiver's filter BW = Signal BW + 2 * ppm * Carrier Frequency\n\n\
+      The occupied bandwidth for 98% of the transmitted power\nis determined from\
+      \ Carson\u2019s Rule:\n\nSignal BW = 2*f_deviation + data_rate\n\nDue to Gaussian\
+      \ pulse shaping,higher frequency components are supressed,\ni.e. the actual\
+      \ occupied bandwidth is slightly smaller."
+    stream_id: filtered
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 556.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_quadrature_demod_cf_0, '0', fir_filter_xxx_0, '0']
+- [analog_quadrature_demod_cf_0_0_0_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_add_const_vxx_0, '0', blocks_divide_xx_0, '1']
+- [blocks_delay_0, '0', blocks_multiply_xx_0, '0']
+- [blocks_divide_xx_0, '0', virtual_sink_0_0_2, '0']
+- [blocks_moving_average_xx_0, '0', blocks_vco_c_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_add_const_vxx_0, '0']
+- [blocks_multiply_xx_0, '0', low_pass_filter_0, '0']
+- [blocks_rms_xx_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_vco_c_0, '0', blocks_multiply_xx_0, '1']
+- [digital_symbol_sync_xx_0, '0', pad_sink_0, '0']
+- [fir_filter_xxx_0, '0', blocks_divide_xx_0, '0']
+- [fir_filter_xxx_0, '0', blocks_rms_xx_0, '0']
+- [low_pass_filter_0, '0', virtual_sink_0_0, '0']
+- [low_pass_filter_0_0, '0', analog_quadrature_demod_cf_0_0_0_0, '0']
+- [pad_source_0, '0', blocks_delay_0, '0']
+- [pad_source_0, '0', low_pass_filter_0_0, '0']
+- [virtual_source_0_0_0, '0', digital_symbol_sync_xx_0, '0']
+- [virtual_source_1, '0', analog_quadrature_demod_cf_0, '0']
+
+metadata:
+  file_format: 1

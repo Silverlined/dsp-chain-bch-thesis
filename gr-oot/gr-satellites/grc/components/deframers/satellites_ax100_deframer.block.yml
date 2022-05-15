@@ -1,0 +1,56 @@
+id: satellites_ax100_deframer
+label: GOMspace AX100 Deframer
+category: '[Satellites]/Deframers'
+
+parameters:
+-   id: mode
+    label: Mode
+    dtype: enum
+    default: '"RS"'
+    options: ['"RS"', '"ASM"']
+    option_labels: ['Reed Solomon', 'ASM+Golay']
+-   id: scrambler
+    label: Scrambler
+    dtype: enum
+    default: '"CCSDS"'
+    options: ['"CCSDS"', '"none"']
+    option_labels: [CCSDS, None]
+    hide: ${ 'none' if mode == '"ASM"' else 'all' }
+-   id: threshold
+    label: Syncword threshold
+    dtype: int
+    default: 0
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: float
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites.components.deframers
+    make: satellites.components.deframers.ax100_deframer(mode = ${mode}, scrambler = ${scrambler}, syncword_threshold = ${threshold}, options=${options})
+
+documentation: |-
+    Deframes a signal using one of the two protocols of the GOMspace NanoCom AX100
+
+    Input:
+        A stream of soft symbols containing packets from the AX100 transceiver
+
+    Output:
+        PDUs with the deframed packets
+
+    Parameters:
+        Mode: indicates the AX100 mode (protocol), which can be ASM+Golay or Reed Solomon
+        Scrambler: enables or disables the CCSDS synchronous scrambler (only ASM+Golay mode)
+        Syncword threshold: number of bit errors to allow in the detection of the 32 bit syncword
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

@@ -1,0 +1,37 @@
+id: satnogs_multi_format_msg_sink
+label: Message Sink
+
+parameters:
+- id: format
+  label: Output Format
+  dtype: int
+  options: [0, 1, 2]
+  option_labels: ['Binary', 'Hex annotation', 'Binary annotation']
+  default: 0
+
+- id: timestamp
+  label: Timestamping
+  dtype: bool
+  default: False
+
+- id: outstream
+  label: Output
+  dtype: enum
+  options: ['False', 'True']
+  option_labels: ['File', 'STDOUT']
+  default: 'True'
+
+- id: filepath
+  label: File
+  dtype: file_save
+  hide: ${ 'all' if outstream == 'True' else 'none' }
+
+inputs:
+- id: in
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.multi_format_msg_sink(${format}, ${timestamp}, ${outstream}, ${filepath})
+
+file_format: 1

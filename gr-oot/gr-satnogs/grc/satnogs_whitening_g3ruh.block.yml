@@ -1,0 +1,19 @@
+id: variable_whitening_g3ruh
+label: Whitening (G3RUH)
+flags: [show_id]
+
+parameters:
+- id: msb
+  label: Bit Order
+  dtype: int
+  options: ['False', 'True']
+  option_labels: ['LSB', 'MSB']
+  default: 'False'
+
+value: ${satnogs.whitening.make_g3ruh(msb)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.whitening.make_g3ruh(${msb})
+
+file_format: 1

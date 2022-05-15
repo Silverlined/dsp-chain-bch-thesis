@@ -1,0 +1,59 @@
+id: satellites_afsk_demodulator
+label: AFSK Demodulator
+category: '[Satellites]/Demodulators'
+
+parameters:
+-   id: baudrate
+    label: Baudrate
+    dtype: float
+-   id: samp_rate
+    label: Sample rate
+    dtype: float
+    default: samp_rate
+-   id: af_carrier
+    label: AF carrier
+    dtype: float
+-   id: deviation
+    label: Deviation
+    dtype: float
+-   id: iq
+    label: IQ input
+    dtype: bool
+    default: False
+    hide: part
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: ${ 'complex' if iq else 'float' }
+
+outputs:
+-   domain: stream
+    dtype: float
+
+templates:
+    imports: import satellites.components.demodulators
+    make: satellites.components.demodulators.afsk_demodulator(baudrate = ${baudrate}, samp_rate = ${samp_rate}, iq = ${iq}, af_carrier = ${af_carrier}, deviation = ${deviation}, options=${options})
+
+documentation: |-
+    Demodulates an AFSK signal
+
+    Input:
+        A stream of samples containing an AFSK signal. If real input is used, the signal is expected to be already FM-demodulated. If IQ (complex) input is used, the signal should not be FM-demodulated.
+
+    Output:
+        The demodulated AFSK soft symbols, normalized to amplitude one
+
+    Parameters:
+        Baudrate: The FSK baudrate in symbols per second
+        Sample rate: The input sample rate in samples per second
+        AF carrier: The audio frequency in Hz at which the FSK tones are centred
+        Deviation: The separation in Hz between the tones and the AF carrier. A negative value indicates that the low tone represents the symbol 1.
+        IQ input: enables IQ (complex) input
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

@@ -1,0 +1,35 @@
+id: satnogs_ber_calculator
+label: BER Calculator
+
+parameters:
+- id: frame_size
+  label: Frame Size
+  dtype: int
+  default: 64
+
+- id: nframes
+  label: Number of frames
+  dtype: int
+  default: 0
+
+- id: skip
+  label: Start frames to ignore
+  dtype: int
+  default: 10
+
+inputs:
+- id: trigger
+  domain: message
+
+- id: received
+  domain: message
+
+outputs:
+- id: pdu
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.ber_calculator(${frame_size}, ${nframes}, ${skip})
+
+file_format: 1

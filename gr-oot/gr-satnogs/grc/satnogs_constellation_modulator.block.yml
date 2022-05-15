@@ -1,0 +1,42 @@
+id: satnogs_constellation_modulator
+label: Constellation Modulator
+flags: [ python ]
+
+parameters:
+-   id: constellation
+    label: Constellation
+    dtype: raw
+-   id: differential
+    label: Differential Encoding
+    dtype: bool
+    default: 'True'
+    options: ['True', 'False']
+    option_labels: ['Yes', 'No']
+-   id: samples_per_symbol
+    label: Samples/Symbol
+    dtype: int
+    default: '2'
+-   id: excess_bw
+    label: Excess BW
+    dtype: real
+    default: '0.35'
+
+inputs:
+-   domain: stream
+    dtype: byte
+
+outputs:
+-   domain: stream
+    dtype: complex
+
+templates:
+    imports: import satnogs
+    make: |-
+        satnogs.generic_mod(
+            constellation=${constellation},
+            differential=${differential},
+            samples_per_symbol=${samples_per_symbol},
+            pre_diff_code=True,
+            excess_bw=${excess_bw})
+
+file_format: 1

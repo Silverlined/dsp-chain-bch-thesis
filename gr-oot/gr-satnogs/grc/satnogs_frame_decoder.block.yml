@@ -1,0 +1,52 @@
+id: satnogs_frame_decoder
+label: Frame Decoder
+
+parameters:
+- id: itype
+  label: IO Type
+  dtype: enum
+  default: complex
+  options: [complex, float, int, short, byte]
+  option_attributes:
+      size: [8, 4, 4, 2, 1]
+  hide: part
+
+- id: vlen
+  label: Vec Length
+  dtype: int
+  default: '1'
+  hide: ${ 'part' if vlen == 1 else 'none' }
+
+- id: decoder_object
+  label: Decoder object
+  dtype: raw
+  default: None
+
+inputs:
+- label: in
+  domain: stream
+  dtype: ${itype}
+  vlen: ${vlen}
+  
+- label: t_error
+  domain: stream
+  dtype: float
+  vlen: 1
+  optional: true
+
+- id: reset
+  domain: message
+  optional: true
+
+outputs:
+- id: out
+  domain: message
+
+asserts:
+- ${vlen > 0}
+
+templates:
+  imports: import satnogs
+  make: satnogs.frame_decoder(${decoder_object}, ${itype.size} * ${vlen})
+
+file_format: 1

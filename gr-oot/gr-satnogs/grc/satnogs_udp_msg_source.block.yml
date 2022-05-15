@@ -1,0 +1,35 @@
+id: satnogs_udp_msg_source
+label: UDP Message Source
+
+parameters:
+- id: addr
+  label: IP Address
+  dtype: string
+  default: '127.0.0.1'
+
+- id: port
+  label: Port
+  dtype: int
+  default: 16886
+
+- id: mtu
+  label: MTU
+  dtype: int
+  default: 1500
+
+- id: msg_type
+  label: Message Type
+  dtype: enum
+  options: ['0', '1', '2']
+  option_labels: ['Raw', 'uint32_t', 'int32_t']
+  default: '0'
+
+outputs:
+- id: msg
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.udp_msg_source(${addr}, ${port}, ${mtu}, ${msg_type})
+
+file_format: 1

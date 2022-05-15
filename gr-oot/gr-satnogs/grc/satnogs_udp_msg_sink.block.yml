@@ -1,0 +1,28 @@
+id: satnogs_udp_msg_sink
+label: UDP Message Sink
+
+parameters:
+- id: addr
+  label: IP Address
+  dtype: string
+  default: '127.0.0.1'
+
+- id: port
+  label: Port
+  dtype: int
+  default: 16886
+
+- id: mtu
+  label: MTU
+  dtype: int
+  default: 1500
+
+inputs:
+- id: in
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.udp_msg_sink(${addr}, ${port}, ${mtu})
+
+file_format: 1

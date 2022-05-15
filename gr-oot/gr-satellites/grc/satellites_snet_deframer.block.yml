@@ -1,0 +1,28 @@
+id: satellites_snet_deframer
+label: S-NET deframer
+category: '[Satellites]/FEC'
+
+parameters:
+-   id: verbose
+    label: Verbose
+    dtype: bool
+    options: ['True', 'False']
+    option_labels: ['Yes', 'No']
+-   id: buggy_crc
+    label: Verbose
+    dtype: bool
+    default: True
+
+inputs:
+-   domain: message
+    id: in
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites
+    make: satellites.snet_deframer(verbose=${verbose}, buggy_crc = ${buggy_crc})
+
+file_format: 1

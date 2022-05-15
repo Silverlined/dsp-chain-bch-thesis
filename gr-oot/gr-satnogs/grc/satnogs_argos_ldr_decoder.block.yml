@@ -1,0 +1,25 @@
+id: variable_argos_ldr_decoder
+label: ARGOS Low Data Rate Decoder
+flags: [show_id]
+
+parameters:
+
+- id: crc_check
+  label: Perform CRC check
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: frame_len
+  label: Maximum Frame Length
+  dtype: int
+  default: 64
+  
+value: ${satnogs.argos_ldr_decoder_make(crc_check, frame_len)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.argos_ldr_decoder_make(${crc_check}, ${frame_len})
+
+file_format: 1

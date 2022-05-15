@@ -1,0 +1,31 @@
+id: satnogs_crc_async
+label: CRC Async
+
+parameters:
+- id: crc
+  label: CRC
+  dtype: raw
+  default: 'satnogs.crc.CRC_NONE'
+  options: ['satnogs.crc.CRC_NONE', 'satnogs.crc.CRC16_CCITT', 'satnogs.crc.CRC16_AUG_CCITT', 'satnogs.crc.CRC16_CCITT_REVERSED', 'satnogs.crc.CRC16_AX25', 'satnogs.crc.CRC16_IBM', 'satnogs.crc.CRC32_C']
+  option_labels: ['None', 'CRC16_CCITT', 'CRC16_AUG_CCITT', 'CRC16_CCITT_REVERSED', 'CRC16_AX25', 'CRC16_IBM', 'CRC32_C']
+
+- id: check
+  label: Operation
+  dtype: bool
+  default: 'False'
+  options: ['False', 'True']
+  option_labels: ['Append', 'Check']
+
+inputs:
+- id: pdu
+  domain: message
+
+outputs:
+- id: pdu
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.crc_async(${crc}, ${check})
+
+file_format: 1

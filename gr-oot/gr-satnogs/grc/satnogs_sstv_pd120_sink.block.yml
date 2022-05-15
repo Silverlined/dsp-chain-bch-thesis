@@ -1,0 +1,18 @@
+id: satnogs_sstv_pd120_sink
+label: SSTV PD120 sink
+
+parameters:
+- id: filename_png
+  label: Output PNG Filename
+  dtype: file_save
+
+inputs:
+- label: in
+  domain: stream
+  dtype: float
+
+templates:
+  imports: import satnogs
+  make: satnogs.sstv_pd120_sink(${filename_png})
+
+file_format: 1

@@ -1,0 +1,34 @@
+id: satnogs_cw_encoder
+label: CW Encoder
+
+parameters:
+
+- id: samp_rate
+  label: Sample Rate
+  dtype: real
+  default: samp_rate
+
+- id: cw_freq
+  label: CW Tone Frequency
+  dtype: real
+  default: 700
+
+- id: wpm
+  label: Words per minute
+  dtype: int
+  default: 20
+
+inputs:
+- domain: message
+  id: symbol
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+
+templates:
+  imports: import satnogs
+  make: satnogs.cw_encoder(${samp_rate}, ${cw_freq}, ${wpm})
+
+file_format: 1

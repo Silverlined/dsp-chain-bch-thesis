@@ -1,0 +1,56 @@
+id: variable_ax25_encoder
+label: AX.25 Encoder Definition
+flags: [show_id]
+
+parameters:
+- id: dest_addr
+  label: Destination Callsign
+  dtype: string
+  default: 'GND'
+
+- id: dest_ssid
+  label: Destination SSID
+  dtype: int
+  default: 0
+  
+- id: src_addr
+  label: Source Callsign
+  dtype: string
+  default: 'GND'
+
+- id: src_ssid
+  label: Source SSID
+  dtype: int
+  default: 0
+
+- id: scrambling
+  label: G3RUH Descrambling
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: nrzi
+  label: NRZI Encoding
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: preamble_len
+  label: Preamble Length
+  dtype: int
+  default: 16
+
+- id: postamble_len
+  label: Postamble Length
+  dtype: int
+  default: 16
+
+value: ${satnogs.ax25_encoder_make(dest_addr, dest_ssid, src_addr, src_ssid, preamble_len, postamble_len, scrambling, nrzi)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax25_encoder_make(${dest_addr}, ${dest_ssid}, ${src_addr}, ${src_ssid}, ${preamble_len}, ${postamble_len}, ${scrambling}, ${nrzi})
+
+file_format: 1

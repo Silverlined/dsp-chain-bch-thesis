@@ -1,0 +1,20 @@
+id: satnogs_metadata_sink
+label: Metadata Sink
+
+parameters:
+- id: filename
+  label: File
+  dtype: file_save
+  
+- id: metadata
+  label: Metadata Engine
+  dtype: raw
+
+inputs:
+- id: meta
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.metadata_sink(${metadata}, ${filename})
+file_format: 1

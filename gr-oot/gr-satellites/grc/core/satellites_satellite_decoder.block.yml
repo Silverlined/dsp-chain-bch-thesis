@@ -1,0 +1,82 @@
+id: satellites_satellite_decoder
+label: Satellite decoder
+category: '[Satellites]/Core'
+
+parameters:
+-   id: definition
+    label: Satellite definition
+    dtype: enum
+    options: ['file', 'name', 'norad']
+    option_labels: ['YAML file', 'Satellite name', 'NORAD ID']
+-   id: file
+    label: File
+    dtype: file_open
+    hide: ${ 'none' if definition == 'file' else 'all' }
+-   id: name
+    label: Satellite name
+    dtype: string
+    hide: ${ 'none' if definition == 'name' else 'all' }
+-   id: norad
+    label: NORAD ID
+    dtype: int
+    hide: ${ 'none' if definition == 'norad' else 'all' }
+-   id: samp_rate
+    label: Sample Rate
+    dtype: float
+    default: samp_rate
+-   id: iq
+    label: IQ input
+    dtype: bool
+    default: False
+    hide: part
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: ${ 'complex' if iq else 'float' }
+
+outputs:
+-   domain: message
+    id: out
+
+templates:
+    imports: import satellites.core
+    make: |
+        % if context.get('definition')() == 'file':
+        satellites.core.gr_satellites_flowgraph(file = ${file}, samp_rate = ${samp_rate}, grc_block = True, iq = ${iq}, options = ${options})
+        % else:
+        % if context.get('definition')() == 'name':
+        satellites.core.gr_satellites_flowgraph(name = ${name}, samp_rate = ${samp_rate}, grc_block = True, iq = ${iq}, options = ${options})
+        % else:
+        % if context.get('definition')() == 'norad':
+        satellites.core.gr_satellites_flowgraph(norad = ${norad}, samp_rate = ${samp_rate}, grc_block = True, iq = ${iq}, options = ${options})
+        % else:
+        raise ValueError('Unspecified satellite type')
+        % endif
+        % endif
+        % endif
+
+documentation: |-
+    This block brings into gnuradio-companion most of the functionality of the gr_satellites command line tool
+
+    Input:
+        A stream of samples, which can be either real or complex (for IQ input)
+    Output:
+        PDUs with decoded frames
+
+    The block performs demodulation, deframing and FEC according to the protocols used by the satellite specified.
+
+    Parameters:
+        Satellite definition: Selects the method to specify the satellite to use
+        File: Path to a YAML file with the SatYAML file describing the satellite, if using the YAML file definition method
+        Satellite name: Name of the satellite, if using the satellite name definition method
+        NORAD ID: NORAD ID of the satellite, if using the NORAD ID definition method
+        Sample Rate: sample rate in sps of the input stream
+        IQ input: selects whether IQ or real input is used
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

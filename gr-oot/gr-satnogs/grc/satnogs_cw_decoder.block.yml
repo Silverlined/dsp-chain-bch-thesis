@@ -1,0 +1,59 @@
+id: variable_cw_decoder
+label: CW Decoder Definition
+flags: [show_id]
+
+parameters:
+- id: samp_rate
+  label: Sampling Rate
+  dtype: real
+  default: samp_rate
+
+- id: fft_size
+  label: FFT Size
+  dtype: int
+  default: 2048
+
+- id: overlapping
+  label: Overlapping
+  dtype: int
+  default: 2040
+
+- id: wpm
+  label: Words per Minute
+  dtype: int
+  default: 20
+
+- id: snr
+  label: Minimum SNR (dB)
+  dtype: real
+  default: 5
+  
+- id: confidence 
+  label: Confidence Level
+  dtype: real
+  default: 0.9
+  
+- id: channels
+  label: Sub Channels
+  dtype: int
+  default: 16
+
+- id: min_frame_size
+  label: Minimum Message Length
+  dtype: int
+  default: 8
+
+- id: max_frame_size
+  label: Maximum Message Length
+  dtype: int
+  default: 96
+
+
+  
+value: ${satnogs.cw_decoder_make(samp_rate, fft_size, overlapping, wpm, snr, confidence, channels, min_frame_size, max_frame_size)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.cw_decoder_make(${samp_rate}, ${fft_size}, ${overlapping}, ${wpm}, ${snr}, ${confidence}, ${channels}, ${min_frame_size}, ${max_frame_size})
+
+file_format: 1

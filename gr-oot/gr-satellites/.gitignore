@@ -1,0 +1,4 @@
+build/*
+*~
+apps/*.py
+__pycache__

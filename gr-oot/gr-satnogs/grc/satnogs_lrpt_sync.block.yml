@@ -1,0 +1,23 @@
+id: satnogs_lrpt_sync
+label: LRPT Frame Sync
+
+parameters:
+- id: thresh
+  label: Threshold
+  dtype: int
+  default: 2
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+outputs:
+- id: cadu
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.lrpt_sync(${thresh})
+
+file_format: 1

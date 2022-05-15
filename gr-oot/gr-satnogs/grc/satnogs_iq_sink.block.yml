@@ -1,0 +1,37 @@
+id: satnogs_iq_sink
+label: IQ Sink
+
+parameters:
+- id: filename
+  label: File
+  dtype: file_save
+
+- id: activate
+  label: Activate
+  dtype: int
+  options: [0, 1]
+  option_labels: ['Off', 'On']
+  default: 1
+
+- id: scale
+  label: Scale
+  dtype: real
+  default: 32767.0
+
+- id: append
+  label: Append File
+  dtype: bool
+  options: [False, True]
+  option_labels: ['False', 'True']
+  default: False
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+
+templates:
+  imports: import satnogs
+  make: satnogs.iq_sink(${scale}, ${filename}, ${append}, ${activate})
+
+file_format: 1

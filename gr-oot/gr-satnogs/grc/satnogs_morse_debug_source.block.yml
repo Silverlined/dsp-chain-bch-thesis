@@ -1,0 +1,39 @@
+id: satnogs_morse_debug_source
+label: Morse code Debug Source
+
+parameters:
+- id: wpm
+  label: Words per Minute
+  dtype: int
+  default: 20
+
+- id: debug_seq
+  label: Sentence
+  dtype: string
+  default: 'HELLO WORLD'
+
+- id: Inject Errors
+  label: errors
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+
+- id: Error probability
+  label: p
+  dtype: real
+  default: 0.1
+
+- id: Delay (millis)
+  label: seq_pause_ms
+  dtype: int
+  default: 1000
+
+outputs:
+- id: out
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.morse_debug_source(${wpm}, ${debug_seq}, ${errors}, ${p}, ${seq_pause_ms})
+
+file_format: 1

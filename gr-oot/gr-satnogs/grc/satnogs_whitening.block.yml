@@ -1,0 +1,38 @@
+id: variable_whitening
+label: Whitening
+flags: [show_id]
+
+parameters:
+- id: mask
+  label: Mask
+  dtype: int
+
+- id: seed
+  label: Seed
+  dtype: int
+
+- id: order
+  label: Order
+  dtype: int
+
+- id: msb
+  label: Bit Order
+  dtype: int
+  options: ['False', 'True']
+  option_labels: ['LSB', 'MSB']
+  default: 'False'
+
+- id: self_sync
+  label: Self Syncronizing
+  dtype: int
+  options: ['False', 'True']
+  option_labels: ['False', 'True']
+  default: 'False'
+
+value: ${satnogs.whitening_make(mask, seed, order, msb, self_sync)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.whitening_make(${mask}, ${seed}, ${order}, ${msb}, ${self_sync})
+
+file_format: 1

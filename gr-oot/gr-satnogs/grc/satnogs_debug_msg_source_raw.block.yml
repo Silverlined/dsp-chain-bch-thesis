@@ -1,0 +1,30 @@
+id: satnogs_debug_msg_source_raw
+label: Message Source (Raw bytes)
+
+parameters:
+- id: msg
+  label: Message
+  dtype: raw
+  default: [0x33, 0x44, 0x55, 0x66]
+
+- id: delay
+  label: Delay (seconds)
+  dtype: real
+  default: 0.01
+
+- id: repeat
+  label: Repeat
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+outputs:
+- id: msg
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.debug_msg_source_raw(${msg}, ${delay}, ${repeat})
+
+file_format: 1

@@ -1,0 +1,19 @@
+id: variable_whitening_ccsds
+label: Whitening (CCSDS)
+flags: [show_id]
+
+parameters:
+- id: msb
+  label: Bit Order
+  dtype: int
+  options: ['False', 'True']
+  option_labels: ['LSB', 'MSB']
+  default: 'False'
+
+value: ${satnogs.whitening.make_ccsds(msb)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.whitening.make_ccsds(${msb})
+
+file_format: 1

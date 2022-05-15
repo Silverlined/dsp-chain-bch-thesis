@@ -1,0 +1,25 @@
+id: satnogs_frame_file_sink
+label: Frame File Sink
+
+parameters:
+- id: prefix_name
+  label: Prefix
+  dtype: string
+  default: 'test'
+
+- id: output_type
+  label: Output Type
+  dtype: int
+  options: [0, 1, 2]
+  option_labels: ['Binary', 'Hex annotation', 'Binary annotation']
+  default: 0
+
+inputs:
+- id: frame
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.frame_file_sink(${prefix_name}, ${output_type})
+
+file_format: 1

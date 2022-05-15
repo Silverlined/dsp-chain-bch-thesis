@@ -1,0 +1,24 @@
+name: BY70-1
+norad: 41909
+data:
+  &tlm Telemetry:
+    telemetry: by70_1
+  &image Image:
+    image: by70_1
+transports:
+  &kiss KISS:
+    protocol: KISS no control byte
+    data:
+    - *tlm
+    - *image
+transmitters:
+  9k6 BPSK downlink:
+    frequency: 436.200e+6
+    modulation: BPSK
+    baudrate: 9600
+    framing: CCSDS Concatenated
+    precoding: differential
+    RS basis: conventional
+    frame size: 114
+    transports:
+    - *kiss

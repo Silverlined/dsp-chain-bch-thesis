@@ -1,0 +1,55 @@
+id: variable_ax25_decoder
+label: AX.25 Decoder Definition
+flags: [show_id]
+
+parameters:
+- id: addr
+  label: Receiver Callsign
+  dtype: string
+  default: 'GND'
+
+- id: ssid
+  label: Receiver SSID
+  dtype: int
+  default: 0
+
+- id: descrambling
+  label: G3RUH Descrambling
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: promisc
+  label: Promiscuous mode
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: crc_check
+  label: Perform CRC check
+  dtype: bool
+  default: 'True'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+- id: frame_len
+  label: Maximum Frame Length
+  dtype: int
+  default: 512
+
+- id: error_correction
+  label: Error Correction
+  dtype: bool
+  default: 'False'
+  options: ['True', 'False']
+  option_labels: ['Enable', 'Disable']
+
+value: ${satnogs.ax25_decoder_make(addr, ssid, promisc, descrambling, crc_check, frame_len, error_correction)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.ax25_decoder_make(${addr}, ${ssid}, ${promisc}, ${descrambling}, ${crc_check}, ${frame_len}, ${error_correction})
+
+file_format: 1

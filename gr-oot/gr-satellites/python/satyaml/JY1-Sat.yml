@@ -1,0 +1,18 @@
+name: JY1-Sat
+alternative_names:
+  - FUNcube-6
+  - JO-97
+norad: 43803
+telemetry_servers:
+  - FUNcube
+data:
+  &tlm Telemetry:
+    telemetry: funcube
+transmitters:
+  1k2 BPSK downlink:
+    frequency: 145.840e+6
+    modulation: DBPSK
+    baudrate: 1200
+    framing: AO-40 FEC
+    data:
+    - *tlm

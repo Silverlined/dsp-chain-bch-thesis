@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  app:
+#    privileged: true
+    network_mode: host
+    build: .
+#    volumes:
+#    - .:/home/radio/persistent
+#    - /tmp/.X11-unix:/tmp/.X11-unix
+#     environment:
+#      DISPLAY: ${DISPLAY}
+    tty: true
+    stdin_open: true
+
+    # example of how device shoud be mounted
+#    devices:
+#     - /dev/bus/usb/004/009:/dev/ttyUSB0

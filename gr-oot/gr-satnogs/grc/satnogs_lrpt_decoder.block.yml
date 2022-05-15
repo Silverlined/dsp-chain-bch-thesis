@@ -1,0 +1,16 @@
+id: satnogs_lrpt_decoder
+label: LRPT Frame Decoder
+
+inputs:
+- id: cadu
+  domain: message
+
+outputs:
+- id: frame
+  domain: message
+
+templates:
+  imports: import satnogs
+  make: satnogs.lrpt_decoder()
+
+file_format: 1

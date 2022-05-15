@@ -1,0 +1,32 @@
+id: variable_usp_encoder
+label: Unified SPUTNIX protocol (USP) Encoder Definition
+flags: [show_id]
+
+parameters:
+- id: preamble
+  label: Preamble
+  dtype: raw
+  default: [0x55, 0x55, 0x55, 0x55]
+
+- id: sync_word
+  label: Synchronization Word
+  dtype: raw
+  default: [0x50, 0x72, 0xF6, 0x4B, 0x2D, 0x90, 0xB1, 0xF5]
+
+- id: pls_code
+  label: PLS Code
+  dtype: int
+  default: 0
+
+- id: whitening
+  label: Whitening
+  dtype: raw
+  default: 'satnogs.whitening_make_ccsds()'
+
+value: ${satnogs.usp_encoder_make(preamble, sync_word, pls_code, whitening)}
+
+templates:
+  imports: import satnogs
+  var_make: self.${id} = ${id} = satnogs.usp_encoder_make(${preamble}, ${sync_word}, ${pls_code}, ${whitening})
+
+file_format: 1

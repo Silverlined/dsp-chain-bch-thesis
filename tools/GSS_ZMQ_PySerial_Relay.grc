@@ -1,0 +1,137 @@
+options:
+  parameters:
+    author: EnduroSat
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: GSS_ZMQ_PySerial_Relay
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: GSS_ZMQ_PySerial_Relay
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: iocp_endurosat_IOCP_DOWNLINK_PDU_0
+  id: iocp_endurosat_IOCP_DOWNLINK_PDU
+  parameters:
+    address: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: ''
+    port: '6666'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 300.0]
+    rotation: 0
+    state: true
+- name: iocp_endurosat_IOCP_UPLINK_PDU_0
+  id: iocp_endurosat_IOCP_UPLINK_PDU
+  parameters:
+    address: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    port: '6666'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 156.0]
+    rotation: 0
+    state: enabled
+- name: satellites_hexdump_sink_0
+  id: satellites_hexdump_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    options: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 216.0]
+    rotation: 0
+    state: true
+- name: satellites_hexdump_sink_0_0
+  id: satellites_hexdump_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    options: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 360.0]
+    rotation: 0
+    state: true
+- name: zeromq_pull_msg_source_0
+  id: zeromq_pull_msg_source
+  parameters:
+    address: tcp://127.0.0.1:6002
+    affinity: ''
+    alias: ''
+    bind: 'False'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    timeout: '100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 300.0]
+    rotation: 0
+    state: true
+- name: zeromq_push_msg_sink_0
+  id: zeromq_push_msg_sink
+  parameters:
+    address: tcp://127.0.0.1:6002
+    affinity: ''
+    alias: ''
+    bind: 'True'
+    comment: ''
+    timeout: '100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 156.0]
+    rotation: 0
+    state: true
+
+connections:
+- [iocp_endurosat_IOCP_UPLINK_PDU_0, out, satellites_hexdump_sink_0, in]
+- [iocp_endurosat_IOCP_UPLINK_PDU_0, out, zeromq_push_msg_sink_0, in]
+- [zeromq_pull_msg_source_0, out, iocp_endurosat_IOCP_DOWNLINK_PDU_0, in]
+- [zeromq_pull_msg_source_0, out, satellites_hexdump_sink_0_0, in]
+
+metadata:
+  file_format: 1

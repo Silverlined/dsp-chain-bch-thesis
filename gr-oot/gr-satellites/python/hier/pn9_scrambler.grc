@@ -1,0 +1,136 @@
+options:
+  parameters:
+    author: Daniel Estevez
+    category: '[Satellites]/Scrambling'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: PN9 scrambler
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: pn9_scrambler
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: PN9 scrambler
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: blocks_pdu_to_tagged_stream_0
+  id: blocks_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 228]
+    rotation: 0
+    state: enabled
+- name: blocks_tagged_stream_to_pdu_0
+  id: blocks_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 228]
+    rotation: 0
+    state: enabled
+- name: digital_additive_scrambler_bb_0
+  id: digital_additive_scrambler_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_byte: '8'
+    comment: ''
+    count: '0'
+    len: '8'
+    mask: '0x21'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    reset_tag_key: '"packet_len"'
+    seed: '0x1FF'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 188]
+    rotation: 0
+    state: enabled
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: message
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 228]
+    rotation: 0
+    state: enabled
+- name: pad_source_0
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: message
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 228]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_pdu_to_tagged_stream_0, '0', digital_additive_scrambler_bb_0, '0']
+- [blocks_tagged_stream_to_pdu_0, pdus, pad_sink_0, in]
+- [digital_additive_scrambler_bb_0, '0', blocks_tagged_stream_to_pdu_0, '0']
+- [pad_source_0, out, blocks_pdu_to_tagged_stream_0, pdus]
+
+metadata:
+  file_format: 1

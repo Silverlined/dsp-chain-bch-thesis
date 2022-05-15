@@ -1,0 +1,56 @@
+id: satellites_fsk_demodulator
+label: FSK Demodulator
+category: '[Satellites]/Demodulators'
+
+parameters:
+-   id: baudrate
+    label: Baudrate
+    dtype: float
+-   id: samp_rate
+    label: Sample rate
+    dtype: float
+    default: samp_rate
+-   id: iq
+    label: IQ input
+    dtype: bool
+    default: False
+    hide: part
+-   id: subaudio
+    label: Subaudio
+    dtype: bool
+    default: False
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: stream
+    dtype: ${ 'complex' if iq else 'float' }
+
+outputs:
+-   domain: stream
+    dtype: float
+
+templates:
+    imports: import satellites.components.demodulators
+    make: satellites.components.demodulators.fsk_demodulator(baudrate = ${baudrate}, samp_rate = ${samp_rate}, iq = ${iq}, subaudio = ${subaudio}, options=${options})
+
+documentation: |-
+    Demodulates an FSK signal
+
+    Input:
+        A stream of samples containing an FSK signal. If real input is used, the signal is expected to be already FM-demodulated. If IQ (complex) input is used, the signal should not be FM-demodulated.
+
+    Output:
+        The demodulated FSK soft symbols, normalized to amplitude one
+
+    Parameters:
+        Baudrate: The FSK baudrate in symbols per second
+        Sample rate: The input sample rate in samples per second
+        IQ input: enables IQ (complex) input
+        Subaudio: use subaudio demodulation
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1

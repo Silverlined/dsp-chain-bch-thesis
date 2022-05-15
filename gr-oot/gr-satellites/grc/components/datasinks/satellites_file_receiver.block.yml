@@ -1,0 +1,43 @@
+id: satellites_file_receiver
+label: File Receiver
+category: '[Satellites]/Data sinks'
+
+parameters:
+-   id: receiver
+    label: FileReceiver class
+    dtype: string
+-   id: path
+    label: Path
+    dtype: string
+-   id: verbose
+    label: Verbose
+    dtype: bool
+    default: False
+    hide: part
+-   id: options
+    label: Command line options
+    dtype: string
+    default: '""'
+    hide: part
+
+inputs:
+-   domain: message
+    id: in
+
+templates:
+    imports: import satellites.components.datasinks
+    make: satellites.components.datasinks.file_receiver(${receiver}, ${path}, ${verbose}, options=${options})
+
+documentation: |-
+    Reassembles a files transmitted in chunks and saves them
+
+    Input:
+        PDUs with packets containing file chunks
+
+    Parameters:
+        FileReceiver class: chunk format definition, which is a class in satellites.filereceiver
+        Path: path of the directory to save files to
+        Verbose: print additional information to the standard output
+        Command line options: options to pass down to the block, following the syntax of the gr_satellites command line tool
+
+file_format: 1
